@@ -15,6 +15,9 @@ export const api = axios.create({
 
 let accessToken = null // memory only, never localStorage
 export const isLoggedIn = ref(false)
+export const changeLogState = (state) => {
+  isLoggedIn.value = state
+}
 
 export const setToken = (t) => {
   accessToken = t

@@ -14,6 +14,8 @@
   --secondary-color: #0f3260;
   --secondary-color-hover: #005295;
   --neutral-color: #eeeef5;
+  --warning-color: #cd2908;
+  --warning-color-hover: #de583e;
 }
 
 body {
