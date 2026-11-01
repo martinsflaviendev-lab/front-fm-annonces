@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { getToken, restoreSession } from '@/api'
+import { getToken } from '@/api'
 
 import HomeView from '../views/HomeView.vue'
 import OneOfferView from '../views/OneOfferView.vue'
@@ -9,7 +9,6 @@ import PublishView from '@/views/PublishView.vue'
 import BuyView from '@/views/BuyView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import UserView from '@/views/UserView.vue'
-import { inject } from 'vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

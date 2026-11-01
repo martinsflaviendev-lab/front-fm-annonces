@@ -1,17 +1,18 @@
 <script setup>
 import { api, changeLogState } from '@/api'
+import { getErrorMessage } from '@/assets/utils/errors'
 import LoadingAnimation from '@/components/LoadingAnimation.vue'
-import { inject, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { errorMessages } from 'vue/compiler-sfc'
 
 const router = useRouter()
-const GlobalStore = inject('GlobalStore')
 // ------------------------------------------------ REFS/INFOS
 const userOffers = ref({ data: null })
 const userInfos = ref({ data: null })
+
 const isLoading = ref(true)
 const hasError = ref(false)
+const errorMessage = ref('')
 
 const isDeletingAccount = ref(false)
 const picture = ref(null)
@@ -21,33 +22,32 @@ const fileInput = ref(null)
 onMounted(async () => {
   try {
     const { data: userData } = await api.get('/users/me')
-    console.log(userData)
+    // console.log(userData)
     userInfos.value = userData
 
     const { data: offersData } = await api.get('/offers/infos/mine')
-    console.log(offersData)
+    // console.log(offersData)
     userOffers.value = offersData
   } catch (error) {
-    console.log(error)
+    errorMessage.value = getErrorMessage(error)
     hasError.value = true
   } finally {
     isLoading.value = false
   }
 })
 
-// ------------------------------------------------ DELETE OFFERS
-
 // ------------------------------------------------ UPDATE AVATAR
 
 const openFilePicker = () => fileInput.value.click()
-const onFileChange = (event) => {
+const onFileChange = async (event) => {
   const file = event.target.files[0]
   if (!file) return
   if (!file.type.startsWith('image/')) return alert('Veuillez ne mettre que des images')
   if (file.size > 5 * 1024 * 1024) return alert("L'image est trop volumineuse")
 
   picture.value = file
-  updateAvatar()
+  await updateAvatar()
+  router.go()
 }
 
 const updateAvatar = async () => {
@@ -56,21 +56,31 @@ const updateAvatar = async () => {
     const formData = new FormData()
     formData.append('files', picture.value)
     const { data } = await api.put('/users/me/avatar', formData)
-    console.log(data)
+    // console.log(data)
+    if (data) {
+      console.log('users info recupération succeded')
+    }
   } catch (error) {
-    console.log(error)
-    errorMessages.value = error.response.data
+    errorMessage.value = getErrorMessage(error)
   }
 }
 
 // ------------------------------------------------ DELETE ONE OFFER
 const deleteOneOffer = async (id) => {
-  console.log(id)
-  const response = await api.delete(`offers/${id}`)
-  console.log(response)
-  alert("l'offre a été supprimée")
-  // location.reload()
-  router.go()
+  try {
+    // console.log(id)
+    const response = await api.delete(`offers/${id}`)
+    // console.log(response)
+    if (response) {
+      alert("l'offre a été supprimée")
+    }
+
+    // location.reload()
+    router.go()
+  } catch (error) {
+    // console.log(error)
+    errorMessage.value = getErrorMessage(error)
+  }
 }
 // ------------------------------------------------ DELETE USER
 const deleteAccount = async () => {
@@ -79,7 +89,7 @@ const deleteAccount = async () => {
     changeLogState(false)
     router.push({ name: 'home' })
   } catch (error) {
-    console.log(error)
+    errorMessage.value = getErrorMessage(error)
   }
 }
 //-------------------------------------------------- DATE FORMATING
@@ -120,6 +130,7 @@ const toGoodDate = (date) => {
                 <button @click="isDeletingAccount = true" class="warning">
                   Supprimer le compte
                 </button>
+                <p v-if="errorMessage" class="warning-text">{{ errorMessage }}</p>
               </div>
             </div>
           </div>
@@ -172,6 +183,10 @@ const toGoodDate = (date) => {
   display: flex;
   flex-direction: column;
   gap: 30px;
+}
+
+.warning-text {
+  color: red;
 }
 
 h1 {

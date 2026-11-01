@@ -1,10 +1,10 @@
 <script setup>
-import { api, getToken } from '@/api'
-import { inject, ref } from 'vue'
+import { api } from '@/api'
+import { getErrorMessage } from '@/assets/utils/errors'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const GlobalStore = inject('GlobalStore')
 
 // INPUTS REFS   __________________________________________✒️
 const title = ref('')
@@ -53,21 +53,21 @@ const handleSubmit = async () => {
     pictures.value.length &&
     pictures.value.length <= 10
   ) {
-    console.log('begining request')
+    // console.log('begining request')
     try {
-      // ------------------------------------ REQUETE UPLOAD
+      // ------------------------------------ REQUEST UPLOAD
       const formData = new FormData()
       pictures.value.forEach((file) => {
         formData.append('files', file)
       })
-      console.log('token before upload: ', getToken())
+      // console.log('token before upload: ', getToken())
 
       const uploadResponse = await api.post('/upload', formData)
-      console.log(uploadResponse.data)
+      // console.log(uploadResponse.data)
 
       const uploadedFileIds = uploadResponse.data.map((file) => file.id)
 
-      // ------------------------------------ REQUETE POST
+      // ------------------------------------ REQUEST POST
       const response = await api.post('/offers', {
         data: {
           title: title.value,
@@ -77,13 +77,13 @@ const handleSubmit = async () => {
         },
       })
 
-      console.log('response>>', response.data)
+      // console.log('response>>', response.data)
       alert('publication réussie')
 
       router.push({ name: 'offer', params: { id: response.data.data.documentId } })
     } catch (error) {
-      console.log(error)
-      errorMessage.value = error.response.data
+      // console.log(error)
+      errorMessage.value = getErrorMessage(error)
     }
   } else {
     console.log('request failed')

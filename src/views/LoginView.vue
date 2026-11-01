@@ -43,18 +43,18 @@ const handleSignin = async () => {
 
       alert('connexion réussie !')
 
-      console.log(response)
-      console.log('the token to compare ====> ', getToken())
+      // console.log(response)
+      // console.log('the token to compare ====> ', getToken())
 
       router.push(route.query.redirect || { name: 'home' })
     } catch (error) {
       isError.value = true
       errorMessage.value = error.response?.data?.error?.message || 'Une erreur est survenue'
-      console.log(error.response?.data)
+      // console.log(error.response?.data)
     }
   } else {
     isCorrect.value = false
-    console.log(`is Correct : ${isCorrect.value}`)
+    // console.log(`is Correct : ${isCorrect.value}`)
   }
 
   isSubmitting.value = false

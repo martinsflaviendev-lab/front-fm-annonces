@@ -1,11 +1,13 @@
 <script setup>
 // import axios from 'axios'
 import { api } from '@/api'
-import { inject, onMounted, ref, watchEffect } from 'vue'
+import { onMounted, ref, watchEffect } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import OfferCard from '@/components/OfferCard.vue'
 import LoadingAnimation from '@/components/LoadingAnimation.vue'
+import { getErrorMessage } from '@/assets/utils/errors'
 
+// ------------------------------------------------- STORE AND IMPORTS
 const router = useRouter()
 
 const props = defineProps({
@@ -15,10 +17,13 @@ const props = defineProps({
   search: String,
   page: Number,
 })
+// ------------------------------------------------- ERRORS
+const errorMessage = ref('')
 
-const GlobalStore = inject('GlobalStore')
+// ------------------------------------------------- OFFERS
 const offersList = ref([])
 
+// ------------------------------------------------- INPUTS
 // Filters refs
 const minPrice = ref(0)
 const maxPrice = ref(100000)
@@ -36,6 +41,7 @@ const numberOfPages = ref(1)
 //   },
 // )
 
+// -------------------------------------------------- ONMOUNTED REQUEST OFFERS
 onMounted(() => {
   watchEffect(async () => {
     // const sortingByPrice = (value) => {
@@ -72,17 +78,18 @@ onMounted(() => {
 
       const { data } = await api.get('/offers', { params })
 
-      console.log(data)
-      console.log(JSON.stringify(params))
+      // console.log(data)
+      // console.log(JSON.stringify(params))
       offersList.value = data.data
       numberOfPages.value = data.meta.pagination.pageCount
     } catch (err) {
-      console.log(err)
+      // console.log(err)
+      errorMessage.value = getErrorMessage(err)
     }
   })
 })
 
-// event functions
+// --------------------------------------------------- FUNCTIONS
 const handleFilters = () => {
   const queries = { ...props }
 
@@ -217,6 +224,10 @@ const goToPage = (n) => {
       <!--  ===================================== CARDS -->
       <div v-else class="offersContainer">
         <OfferCard v-for="offer in offersList" :key="offer.id" :offer="offer" />
+      </div>
+
+      <div v-if="errorMessage">
+        <p>{{ errorMessage }}</p>
       </div>
 
       <!--  ===================================== PAGE -->

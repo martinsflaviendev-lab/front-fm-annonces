@@ -1,12 +1,19 @@
 <script setup>
-import { computed, onMounted, ref, inject } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { api } from '@/api'
 import { loadStripe } from '@stripe/stripe-js'
+import { getErrorMessage } from '@/assets/utils/errors.js'
 
 //  -----------------------------------------------STRIPE INIT
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY)
 const cardElement = ref(null)
-const stripeLoadError = ref(false)
+// const stripeLoadError = ref(false)
+
+// ------------------------------------------------ ERRORS
+const loadError = ref('')
+const errorMessage = ref('')
+const isPaying = ref(false)
+
 // ------------------------------------------------INFOS
 const offerInfo = ref({ data: null })
 const props = defineProps({
@@ -30,17 +37,19 @@ const totalAmount = computed(() => {
 const firstname = ref(null)
 const lastname = ref(null)
 const telNumber = ref(null)
-//  these 3 refs are here for a recap page that I didn't do yet. Maybe a collection commands tied to the users
+//  these 3 refs are here for a recap page that I didn't do yet. Maybe a collection "commandes" tied to the users
 
 // ------------------------------------ OFFER REQUEST/ STRIPE INIT
 onMounted(async () => {
   // --------------------------- offer data request
   try {
     const { data } = await api.get(`/offers/${props.id}`)
-    console.log(data)
+    // console.log(data)
     offerInfo.value = data
   } catch (err) {
-    console.log(err)
+    // console.log(err)
+    loadError.value = getErrorMessage(err)
+    return
   }
   //  -------------------------- Stripe promise
   try {
@@ -69,38 +78,44 @@ onMounted(async () => {
 
     cardElement.value.mount('#card-element')
   } catch (error) {
-    console.log(error)
-    stripeLoadError.value = true
+    // console.log(error)
+    loadError.value = getErrorMessage(error)
   }
 })
 
 // ----------------------------------------------- PAYMENT REQUEST
 
 const handlePayement = async () => {
-  if (offer.value && firstname.value && lastname.value) {
+  if (!offer.value && !firstname.value && !lastname.value) {
+    errorMessage.value = 'Veuillez renseigner votre prénom et votre nom'
+    return
+  }
+
+  isPaying.value = true
+  try {
     // ------------------------------ stripe part
     const stripe = await stripePromise
-    const { token } = await stripe.createToken(cardElement.value)
-    const stripeToken = token.id
-    // ------------------------------ body part
+    const { token, error } = await stripe.createToken(cardElement.value)
+    if (error) {
+      errorMessage.value = error.message
+      return
+    }
     const body = {
       documentId: offer.value.documentId,
-      token: stripeToken,
+      token: token.id,
       shipping: shipping.value,
     }
 
-    try {
-      const response = await api.post('/offers/buy', body)
-
-      console.log(response)
-      if (response.status === 200 && response.data.status === 'succeeded') {
-        alert('paiement accepté')
-      } else {
-        alert('une erreur a empêché le paiment')
-      }
-    } catch (error) {
-      console.log(error)
+    const { data } = await api.post('/offers/buy', body)
+    if (data.status === 'succeeded') {
+      alert('paiement accepté')
+    } else {
+      errorMessage.value = "Le paiement n'a pas abouti"
     }
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
+  } finally {
+    isPaying.value = false
   }
 }
 </script>
@@ -151,7 +166,9 @@ const handlePayement = async () => {
           <div class="stripeCard">
             <h2>Coordonnées bancaires</h2>
             <div id="card-element"></div>
-            <button vif="offer" @click="handlePayement">Payer</button>
+            <button vif="offer" @click="handlePayement" :disabled="isPaying || !offer">
+              Payer
+            </button>
           </div>
         </div>
         <!-- ============================================= DELIVERY -->
@@ -197,6 +214,16 @@ const handlePayement = async () => {
               Le formulaire de paiement n'a pas pu se charger. Veuillez vérifier que votre
               navigateur n'ampêche pas les scripts de stripe (protection anti-pistage) et recheargez
               la page.
+            </p>
+          </div>
+          <div v-if="errorMessage" class="warning">
+            <p>
+              {{ errorMessage }}
+            </p>
+          </div>
+          <div v-if="loadError" class="warning">
+            <p>
+              {{ loadError }}
             </p>
           </div>
         </div>

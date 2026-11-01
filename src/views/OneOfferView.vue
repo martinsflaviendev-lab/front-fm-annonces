@@ -2,10 +2,14 @@
 import { computed, onMounted, ref } from 'vue'
 import { api } from '@/api'
 import { useRoute, useRouter } from 'vue-router'
+import { getErrorMessage } from '@/assets/utils/errors'
 
 //-------------------------------------------------- ROUTING
 const route = useRoute()
 const router = useRouter()
+
+// ------------------------------------------------- ERRORS
+const errorMessage = ref('')
 
 //-------------------------------------------------- INFOS
 const offerInfo = ref({ data: null })
@@ -23,10 +27,10 @@ const prev = () =>
 onMounted(async () => {
   try {
     const { data } = await api.get(`/offers/${props.id}`)
-    console.log(data)
+    // console.log(data)
     offerInfo.value = data
-  } catch (err) {
-    console.log(err)
+  } catch (error) {
+    errorMessage.value = getErrorMessage(error)
   }
 })
 

@@ -28,7 +28,7 @@ const handleSignin = async () => {
 
   if (email.value && username.value && password.value) {
     try {
-      console.log('handling sign up')
+      // console.log('handling sign up')
 
       // --------------------------------------- request
       const response = await api.post('/auth/local/register', {
@@ -47,8 +47,6 @@ const handleSignin = async () => {
       // console.log(response)
       // console.log('token set: ', getToken())
     } catch (error) {
-      console.log(error)
-      console.log(error.response.data.error)
       isError.value = true
       errorMessage.value = error.response?.data?.error?.message || 'Une erreur est survenue'
     }

@@ -61,11 +61,8 @@ h3 {
   font-size: 18px;
 }
 .cardContainer {
-  /* height: 300px; */
   height: 100%;
   min-height: 350px;
-  /* width: 150px; */
-  /* border: 1px solid coral; */
 }
 
 .author {
