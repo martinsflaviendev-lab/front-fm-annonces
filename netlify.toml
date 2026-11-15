@@ -1,0 +1,9 @@
+  from = "/api/*"
+  to = "https://api--back-fm-annonces--6y8z59vkk8y2.code.run/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

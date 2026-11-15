@@ -23,7 +23,7 @@ const handleSearch = () => {
 <template>
   <header>
     <div class="mainPart">
-      <img src="../assets/images/logo-leboncoin.svg" alt="" />
+      <img src="../assets/images/titre_fm_annonces.svg" alt="" />
       <div class="secondPart">
         <RouterLink :to="{ name: 'publish' }"><button>+ Déposer une annonce</button></RouterLink>
 
