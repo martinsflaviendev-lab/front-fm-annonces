@@ -310,4 +310,40 @@ button {
   display: flex;
   gap: 30px;
 }
+
+/* ==================================== RESPONSIVE */
+@media (max-width: 768px) {
+  .userContainer > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .photo {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .userContainer > div img {
+    width: 100px;
+    height: 100px;
+  }
+  .buttons > button {
+    font-size: 10px;
+    width: 100px;
+  }
+
+  .offersContainer {
+    gap: 50px;
+  }
+
+  .offersContainer > div {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    /* border-bottom: 1px solid black; */
+  }
+  .offersContainer > div p {
+    font-size: 12px;
+  }
+}
 </style>

@@ -53,4 +53,11 @@ h3 {
   color: black;
   text-decoration: none;
 }
+
+@media (max-width: 768px) {
+  .container {
+    gap: 0px;
+    flex-direction: column;
+  }
+}
 </style>

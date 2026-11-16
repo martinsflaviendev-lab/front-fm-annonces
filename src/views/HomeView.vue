@@ -464,6 +464,24 @@ form button:hover {
   background-color: var(--secondary-color);
   color: white;
 }
+
+/* ===========================================RESPONSIVE */
+@media (max-width: 768px) {
+  .filterBar {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    margin: 10px 0px;
+  }
+
+  .offersContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .annonce {
+    padding-top: 20px;
+  }
+}
 /* @media (max-width: 1400px) {
   .container {
     width: 900px;

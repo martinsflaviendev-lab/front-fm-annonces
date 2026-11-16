@@ -78,3 +78,16 @@ footer {
 .warning {
   color: red;
 }
+
+@media (max-width: 768px) {
+  * {
+    max-width: 300px;
+  }
+  CardAnimation {
+    display: none;
+  }
+
+  form {
+    width: 250px;
+  }
+}
