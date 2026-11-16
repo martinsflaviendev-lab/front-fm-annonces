@@ -385,4 +385,12 @@ input {
   font-weight: 600;
   color: black;
 }
+
+@media (max-width: 768px) {
+  .enveloppe {
+    display: flex;
+    flex-direction: column-reverse;
+    height: auto;
+  }
+}
 </style>

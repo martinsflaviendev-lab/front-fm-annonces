@@ -285,4 +285,23 @@ button {
 .two:hover {
   background-color: var(--secondary-color-hover);
 }
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    gap: 30px;
+    margin: 10px auto;
+  }
+
+  .offerContainer {
+    margin: 0px;
+    padding: 20px;
+  }
+
+  .imageContainer {
+    height: 300px;
+    width: 100%;
+    align-self: center;
+  }
+}
 </style>
