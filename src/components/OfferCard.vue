@@ -20,6 +20,7 @@ const toGoodDate = (date) => {
     <div class="cardContainer">
       <div class="author">
         <img v-if="props.offer.owner?.avatar" :src="props.offer.owner.avatar.url" alt="" />
+        <img v-else src="../assets/images/user-solid-full.svg" alt="" />
         <h3>{{ props.offer.owner.username }}</h3>
       </div>
       <img

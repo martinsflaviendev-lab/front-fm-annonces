@@ -6,10 +6,12 @@
       <h2>Made by Flavien Martins with Vue.js and Strapi 5</h2>
       <div class="container">
         <div>
-          <a href="">Mon Github</a>
+          <a href=""> <font-awesome-icon icon=" fa-brands fa-github" /> ma page gitHub </a>
         </div>
         <div>
-          <h3>Mon mail: martins.flavien.dev@gmail.com</h3>
+          <h3>
+            <font-awesome-icon icon=" fa-regular fa-envelope" /> martins.flavien.dev@gmail.com
+          </h3>
         </div>
       </div>
     </div>
@@ -52,6 +54,10 @@ h3 {
   font-size: 15px;
   color: black;
   text-decoration: none;
+}
+
+.container > div {
+  display: flex;
 }
 
 @media (max-width: 768px) {

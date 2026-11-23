@@ -33,7 +33,9 @@ const handleSearch = () => {
 <template>
   <header>
     <div class="mainPart">
-      <button class="burger-button" @click="toggleMenu()">M</button>
+      <button class="burger-button" @click="toggleMenu()">
+        <font-awesome-icon :icon="['fas', 'bars']" />
+      </button>
       <div class="logo-and-search">
         <img src="../assets/images/titre_fm_annonces.svg" alt="" />
         <div class="secondPart">
@@ -47,7 +49,9 @@ const handleSearch = () => {
               v-model="searchedWord"
               placeholder="Rechercher"
             />
-            <button class="searchcube" type="submit">🔎</button>
+            <button class="searchcube" type="submit">
+              <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+            </button>
           </form>
         </div>
       </div>

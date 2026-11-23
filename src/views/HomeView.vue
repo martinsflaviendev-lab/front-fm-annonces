@@ -232,7 +232,9 @@ const goToPage = (n) => {
 
       <!--  ===================================== PAGE -->
       <div class="changePages">
-        <button v-if="page > 1" @click="previousPage">Page précédente</button>
+        <button v-if="page > 1" @click="previousPage">
+          <font-awesome-icon icon="fa-solid fa-chevron-left" />
+        </button>
         <button
           class="pageNumber"
           v-for="n in numberOfPages"
@@ -242,7 +244,9 @@ const goToPage = (n) => {
         >
           {{ n }}
         </button>
-        <button v-if="page < numberOfPages" @click="nextPage">Page suivante</button>
+        <button v-if="page < numberOfPages" @click="nextPage">
+          <font-awesome-icon icon="fa-solid fa-chevron-right" />
+        </button>
       </div>
     </div>
   </main>
@@ -439,7 +443,7 @@ form button:hover {
 }
 .changePages button {
   background-color: var(--secondary-color);
-  width: 120px;
+  width: 40px;
   height: 40px;
   transform: translateY(20px);
   border: 0px;

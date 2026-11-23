@@ -123,6 +123,7 @@ const toGoodDate = (date) => {
 
             <div class="photo">
               <img v-if="userInfos.avatar" :src="userInfos.avatar.url" alt="" />
+              <img v-else src="..\assets\images\user-solid-full.svg" />
               <div class="buttons">
                 <input type="file" ref="fileInput" accept="image/*" hidden @change="onFileChange" />
                 <button class="neutral" @click="openFilePicker">Changer photo</button>
@@ -234,6 +235,7 @@ button {
   object-fit: cover;
   border-radius: 70px;
 }
+
 .photo {
   display: flex;
   gap: 20px;
